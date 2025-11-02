@@ -1,0 +1,8 @@
+# Get all projects
+GET http://localhost:5000/api/projects
+Accept: application/json
+###
+
+# Get a single project by slug
+GET http://localhost:5000/api/projects/pulse-project-management
+Accept: application/json
