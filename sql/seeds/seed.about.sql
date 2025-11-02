@@ -1,4 +1,3 @@
--- seed.sql
 USE portfolio;
 
 INSERT INTO about (
@@ -30,12 +29,3 @@ ON DUPLICATE KEY UPDATE
     github_url = VALUES(github_url),
     resume_url = VALUES(resume_url);
 
-INSERT INTO projects (title, description, tech_stack, image_url, live_url, github_url)
-VALUES
-('Portfolio Website', 'Built with Nuxt3 and Tailwind', JSON_ARRAY('Nuxt3','TailwindCSS','Node'), NULL, 'https://yourdomain.com', 'https://github.com/you/portfolio'),
-('Planning Poker App', 'Estimation tool for teams', JSON_ARRAY('Vue3','Express','Socket.io'), NULL, null, 'https://github.com/you/planning-poker');
-
-INSERT INTO skills (name, level, category) VALUES
-('JavaScript', 'expert', 'language'),
-('Vue/Nuxt', 'advanced', 'frontend'),
-('Node.js', 'intermediate', 'backend');
