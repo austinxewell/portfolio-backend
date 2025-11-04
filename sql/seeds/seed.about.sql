@@ -8,7 +8,8 @@ INSERT INTO about (
     contact_email,
     linkedin_url,
     github_url,
-    resume_url
+    resume_url,
+    blog_url
 )
 VALUES (
     1,
@@ -18,7 +19,8 @@ VALUES (
     'austin.ewell86@gmail.com',
     'https://www.linkedin.com/in/austin-ewell-01a60313a/',
     'https://github.com/austinxewell',
-    'https://docs.google.com/document/d/1cu6hZPHk1PHfz0GArEs7qk5DN2fKxlggOiJoiApVy0Y/edit?usp=sharing'
+    'https://docs.google.com/document/d/1cu6hZPHk1PHfz0GArEs7qk5DN2fKxlggOiJoiApVy0Y/edit?usp=sharing',
+    'https://austinxewell.github.io/my-dev-blog/'
 )
 ON DUPLICATE KEY UPDATE
     name = VALUES(name),
@@ -27,5 +29,6 @@ ON DUPLICATE KEY UPDATE
     contact_email = VALUES(contact_email),
     linkedin_url = VALUES(linkedin_url),
     github_url = VALUES(github_url),
-    resume_url = VALUES(resume_url);
+    resume_url = VALUES(resume_url),
+    blog_url = VALUES(blog_url);
 

@@ -1,0 +1,3 @@
+# Get services
+GET http://localhost:5000/api/services
+Accept: application/json

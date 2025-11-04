@@ -1,0 +1,13 @@
+# Get all projects
+GET http://localhost:5000/api/projects
+Accept: application/json
+###
+
+# Get all favorite projects
+GET http://localhost:5000/api/projects/favorites
+Accept: application/json
+###
+
+# Get a single project by slug
+GET http://localhost:5000/api/projects/simple-chat
+Accept: application/json

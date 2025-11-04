@@ -7,6 +7,9 @@ import morgan from 'morgan'
 import projectsRouter from './routes/projects.js'
 import aboutRouter from './routes/about.js'
 import skillsRouter from './routes/skills.js'
+import collaborationRouter from './routes/collaborations.js'
+import servicesRouter from './routes/services.js'
+
 import errorHandler from './middlewares/errorHandler.js'
 
 dotenv.config()
@@ -22,6 +25,8 @@ app.get('/', (req, res) => res.send('Portfolio API running'))
 app.use('/api/projects', projectsRouter)
 app.use('/api/about', aboutRouter)
 app.use('/api/skills', skillsRouter)
+app.use('/api/collaborations', collaborationRouter)
+app.use('/api/services', servicesRouter)
 
 // fallback
 app.use((req, res) => res.status(404).json({ error: 'Not found' }))

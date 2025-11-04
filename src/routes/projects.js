@@ -1,6 +1,6 @@
 import express from 'express'
 import pool from '../db.js'
-import { getAllProjectsQuery, getProjectBySlugQuery } from '../queries/projects.js'
+import { getAllProjectsQuery, getAllFavoriteProjectsQuery, getProjectBySlugQuery } from '../queries/projects.js'
 
 const router = express.Router()
 
@@ -8,6 +8,24 @@ const router = express.Router()
 router.get('/', async (req, res, next) => {
     try {
         const [rows] = await pool.query(getAllProjectsQuery)
+
+        // Parse JSON fields
+        const projects = rows.map(p => ({
+            ...p,
+            images: p.images || [],
+            tech_tags: p.tech_tags || []
+        }))
+
+        res.json(projects)
+    } catch (err) {
+        next(err)
+    }
+})
+
+// GET /api/projects
+router.get('/favorites', async (req, res, next) => {
+    try {
+        const [rows] = await pool.query(getAllFavoriteProjectsQuery)
 
         // Parse JSON fields
         const projects = rows.map(p => ({
