@@ -1,0 +1,4 @@
+# Get all tags
+GET http://localhost:5000/api/test
+Accept: application/json
+###
