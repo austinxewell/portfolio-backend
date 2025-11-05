@@ -9,5 +9,45 @@ Accept: application/json
 ###
 
 # Get a single project by slug
-GET http://localhost:5000/api/projects/simple-chat
+GET http://localhost:5000/api/projects/slug/simple-chat
 Accept: application/json
+###
+
+# Get a single project by id
+GET http://localhost:5000/api/projects/2
+Accept: application/json
+###
+
+# Create a new project
+POST http://localhost:5000/api/projects
+Content-Type: application/json
+
+{
+    "project_name": "My New Project",
+    "slug": "my-new-project",
+    "overview": "This is a brief overview of my project.",
+    "description": "Here is a longer description that can include details, features, and tech used.",
+    "live_url": "https://mynewproject.com",
+    "github_url": "https://github.com/myusername/my-new-project",
+    "is_favorite": true
+}
+###
+
+# Update an existing project
+PUT http://localhost:5000/api/projects/3
+Content-Type: application/json
+
+{
+    "project_name": "Updated Project Name",
+    "slug": "updated-project-slug",
+    "overview": "Updated overview of the project.",
+    "description": "Updated detailed description of the project.",
+    "live_url": "https://updatedproject.com",
+    "github_url": "https://github.com/myusername/updated-project",
+    "is_favorite": false
+}
+
+### 
+
+# Delete an existing project
+DELETE http://localhost:5000/api/projects/3

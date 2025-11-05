@@ -1,0 +1,14 @@
+# Get all tags
+GET http://localhost:5000/api/tags
+Accept: application/json
+###
+
+# Create a new tag
+POST http://localhost:5000/api/tags
+Content-Type: application/json
+
+{ "tag_name": "New Tag" }
+###
+
+# Delete an existing tag
+DELETE http://localhost:5000/api/tags/23

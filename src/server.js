@@ -9,6 +9,7 @@ import aboutRouter from './routes/about.js'
 import skillsRouter from './routes/skills.js'
 import collaborationRouter from './routes/collaborations.js'
 import servicesRouter from './routes/services.js'
+import tagsRouter from './routes/tags.js'
 
 import errorHandler from './middlewares/errorHandler.js'
 
@@ -27,6 +28,7 @@ app.use('/api/about', aboutRouter)
 app.use('/api/skills', skillsRouter)
 app.use('/api/collaborations', collaborationRouter)
 app.use('/api/services', servicesRouter)
+app.use('/api/tags', tagsRouter)
 
 // fallback
 app.use((req, res) => res.status(404).json({ error: 'Not found' }))
