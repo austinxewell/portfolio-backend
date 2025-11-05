@@ -1,4 +1,4 @@
-USE portfolio
+USE portfolio;
 
 INSERT INTO services (service_name, description, icon)
 VALUES
@@ -18,4 +18,5 @@ VALUES
         'i-lucide:layout-dashboard'
     )
 ON DUPLICATE KEY UPDATE
-    service_name = VALUES(service_name)
+    description = VALUES(description),
+    icon = VALUES(icon);

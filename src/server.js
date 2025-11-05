@@ -20,6 +20,7 @@ import servicesRouter from './routes/services.js'
 import tagsRouter from './routes/tags.js'
 import imagesRouter from './routes/images.js'
 import authRouter from './routes/auth.js'
+import testRouter from './routes/test.js'
 
 // Custom error handler
 import errorHandler from './middlewares/errorHandler.js'
@@ -67,6 +68,7 @@ app.use('/api/services', servicesRouter)
 app.use('/api/tags', tagsRouter)
 app.use('/api/images', imagesRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/test', testRouter)
 
 // --------------------
 // FALLBACKS & ERROR HANDLING
