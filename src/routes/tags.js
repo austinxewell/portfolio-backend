@@ -1,5 +1,6 @@
 import express from 'express'
 import pool from '../db.js'
+import authenticate from '../middlewares/authenticate.js'
 
 const router = express.Router()
 
@@ -14,7 +15,7 @@ router.get('/', async (req, res, next) => {
 })
 
 // POST /api/tags
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
     try {
         const { tag_name } = req.body
     
@@ -33,8 +34,36 @@ router.post('/', async (req, res, next) => {
     }
 })
 
+// POT /api/tags/link
+router.post('/link', authenticate, async (req, res, next) => {
+    try {
+        const { project_id, tag_id, is_primary } = req.body
+
+        if (!project_id || !tag_id) return res.status(400).json({ error: 'project_id and tag_id are required'})
+
+        // Validate project and tag exist
+        const [proj] = await pool.query('SELECT * FROM projects WHERE id = ?', [project_id])
+        if (!proj.length) return res.status(404).json({ error: 'Project not found' })
+
+        const [tag] = await pool.query('SELECT * FROM tech_tags WHERE id = ?', [tag_id])
+        if (!tag.length) return res.status(404).json({ error: 'Tag not found' })
+
+        // Insert or Update relationship
+        await pool.query(
+            `INSERT INTO project_tech_tags (project_id, tag_id, is_primary)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE is_primary = VALUES(is_primary)`,
+            [project_id, tag_id, is_primary ? 1 : 0]
+        )
+
+        res.status(201).json({ message: 'Tag linked to project successfully'})
+    } catch (err) {
+        next(err)
+    }
+})
+
 // DELETE /api/tags/:id
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authenticate, async (req, res, next) => {
     try {
         const { id } = req.params
 

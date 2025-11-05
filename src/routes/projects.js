@@ -1,5 +1,6 @@
 import express from 'express'
 import pool from '../db.js'
+import authenticate from '../middlewares/authenticate.js'
 import { getAllProjectsQuery, getAllFavoriteProjectsQuery, getProjectByIdQuery, getProjectBySlugQuery } from '../queries/projects.js'
 
 const router = express.Router()
@@ -76,7 +77,7 @@ router.get('/slug/:slug', async (req, res, next) => {
 })
 
 // POST /api/projects
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
     try {
         const { project_name, slug, overview, description, live_url, github_url, is_favorite } = req.body
 
@@ -99,7 +100,7 @@ router.post('/', async (req, res, next) => {
 })
 
 // PUT /api/projects/:id - Update an existing project
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authenticate, async (req, res, next) => {
     try {
         const { id } = req.params
         const { project_name, slug, overview, description, live_url, github_url, is_favorite } = req.body
@@ -140,7 +141,7 @@ router.put('/:id', async (req, res, next) => {
 })
 
 // DELETE /api/projects/:id - Delete a project
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authenticate, async (req, res, next) => {
     try {
         const { id } = req.params
 

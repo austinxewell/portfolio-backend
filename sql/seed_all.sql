@@ -26,3 +26,6 @@ SOURCE sql/seeds/seed.collaborations.sql;
 
 -- Seed Services
 SOURCE sql/seeds/seed.services.sql;
+
+-- Seed Users
+SOURCE sql/seeds/seed.users.sql;

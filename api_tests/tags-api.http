@@ -5,10 +5,23 @@ Accept: application/json
 
 # Create a new tag
 POST http://localhost:5000/api/tags
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MjM2MDg0MSwiZXhwIjoxNzYyMzYxNzQxfQ.yKJqu6kD0P5_KHUdJiMVxU0yX3M3Jkb7Swz07pKK1g0
 Content-Type: application/json
 
 { "tag_name": "New Tag" }
 ###
 
+# Link a Tag to a Project
+POST http://localhost:5000/api/tags/link
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MjM2MDg0MSwiZXhwIjoxNzYyMzYxNzQxfQ.yKJqu6kD0P5_KHUdJiMVxU0yX3M3Jkb7Swz07pKK1g0
+
+{ 
+    "project_id": 4,
+    "tag_id": 1,
+    "is_primary": true
+}
+###
+
 # Delete an existing tag
 DELETE http://localhost:5000/api/tags/23
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MjM2MDg0MSwiZXhwIjoxNzYyMzYxNzQxfQ.yKJqu6kD0P5_KHUdJiMVxU0yX3M3Jkb7Swz07pKK1g0
