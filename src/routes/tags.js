@@ -5,7 +5,6 @@ const router = express.Router()
 
 // GET /api/tags
 router.get('/', async (req, res, next) => {
-    console.log(`Here`);
     try {
         const [rows] = await pool.query('SELECT * FROM tech_tags ORDER BY id')
         res.json(rows)
@@ -34,7 +33,7 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-// DELETE /api/tags
+// DELETE /api/tags/:id
 router.delete('/:id', async (req, res, next) => {
     try {
         const { id } = req.params

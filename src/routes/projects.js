@@ -1,6 +1,6 @@
 import express from 'express'
 import pool from '../db.js'
-import { getAllProjectsQuery, getAllFavoriteProjectsQuery, getProjectBySlugQuery } from '../queries/projects.js'
+import { getAllProjectsQuery, getAllFavoriteProjectsQuery, getProjectByIdQuery, getProjectBySlugQuery } from '../queries/projects.js'
 
 const router = express.Router()
 
@@ -40,6 +40,23 @@ router.get('/favorites', async (req, res, next) => {
     }
 })
 
+// GET project by ID (with images and tech tags)
+router.get('/:id', async (req, res, next) => {
+    try {
+        const [rows] = await pool.query(getProjectByIdQuery, [req.params.id])
+
+        if (!rows.length) return res.status(404).json({ error: 'Not found' })
+
+        const project = rows[0]
+        project.images = project.images || []
+        project.tech_tags = project.tech_tags || []
+
+        res.json(project)
+    } catch (err) {
+        next(err)
+    }
+})
+
 // GET /api/projects/slug/:slug
 router.get('/slug/:slug', async (req, res, next) => {
     try {
@@ -56,16 +73,6 @@ router.get('/slug/:slug', async (req, res, next) => {
     } catch (err) {
         next(err)
     }
-})
-
-// GET /api/projects/:id
-router.get('/:id', async (req, res, next) => {
-    const [rows] = await pool.query(`SELECT * FROM projects WHERE id = ?`, [req.params.id])
-    if (!rows.length) return res.status(404).json({ error: 'Not found' })
-    const project = rows[0]
-    project.images = project.images || []
-    project.tech_tags = project.tech_tags || []
-    res.json(project)
 })
 
 // POST /api/projects

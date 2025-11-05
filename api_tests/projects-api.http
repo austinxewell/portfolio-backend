@@ -9,12 +9,12 @@ Accept: application/json
 ###
 
 # Get a single project by slug
-GET http://localhost:5000/api/projects/slug/simple-chat
+GET http://localhost:5000/api/projects/slug/my-new-project
 Accept: application/json
 ###
 
 # Get a single project by id
-GET http://localhost:5000/api/projects/2
+GET http://localhost:5000/api/projects/4
 Accept: application/json
 ###
 
