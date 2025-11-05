@@ -1,0 +1,3 @@
+# Get about
+GET http://localhost:5000/api/about
+Accept: application/json

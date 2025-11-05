@@ -1,0 +1,3 @@
+# Get Collaborations
+GET http://localhost:5000/api/collaborations
+Accept: application/json

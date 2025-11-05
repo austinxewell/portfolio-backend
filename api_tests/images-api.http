@@ -1,0 +1,33 @@
+# Get all images
+GET http://localhost:5000/api/images
+Accept: application/json
+###
+
+# Get images by project ID
+GET http://localhost:5000/api/images/project/1
+Accept: application/json
+###
+
+# Post a new image
+POST http://localhost:5000/api/images
+Content-Type: application/json
+
+{ 
+    "img_name": "NEW IMAGE",
+    "img_url": "newimageurl.com"
+}
+###
+
+# Link an Image to a Project
+POST http://localhost:5000/api/images/link
+Content-Type: application/json
+
+{ 
+    "project_id": 4,
+    "image_id": 20,
+    "is_thumbnail": true
+}
+###
+
+# Delete an existing image
+DELETE http://localhost:5000/api/images/19

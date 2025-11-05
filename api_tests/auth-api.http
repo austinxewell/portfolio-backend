@@ -1,0 +1,40 @@
+### Auth: Register
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "password123",
+    "display_name": "Admin"
+}
+
+###
+
+### Auth: Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "password123"
+}
+
+###
+
+### Auth: Get Current User (requires access token)
+GET http://localhost:5000/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MjM1OTM0OSwiZXhwIjoxNzYyMzYwMjQ5fQ.NHcOXed2umqQLuGJq1Z6WSiUxHLIMpN0ld2hsAX9KUE
+
+# ###
+
+# ### Auth: Refresh Access Token (requires refresh token cookie)
+# POST http://localhost:5000/api/auth/refresh
+# Cookie: refreshToken={{refreshToken}}
+
+###
+
+### Auth: Logout (clear refresh token cookie)
+POST http://localhost:5000/api/auth/logout
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MjM1OTM0OSwiZXhwIjoxNzYyMzYwMjQ5fQ.NHcOXed2umqQLuGJq1Z6WSiUxHLIMpN0ld2hsAX9KUE
+
+###
