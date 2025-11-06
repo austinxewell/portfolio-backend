@@ -35,11 +35,22 @@ const app = express()
 app.use(helmet())
 
 // CORS - allow frontend only
-const allowedOrigin =
-    process.env.NODE_ENV === 'production'
-        ? 'https://auewellify.dev'
-        : 'http://localhost:3000'
-app.use(cors({ origin: allowedOrigin, credentials: true }))
+const allowedOrigins = [
+    'https://auewellify.dev',
+    'http://localhost:3000'
+]
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true)
+        } else {
+        console.warn(`Blocked by CORS: ${origin}`)
+        callback(new Error('Not allowed by CORS'))
+        }
+    },
+    credentials: true
+}))
 
 // Parse JSON body (limit size to avoid huge payload attacks)
 app.use(express.json({ limit: '10kb' }))
