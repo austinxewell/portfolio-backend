@@ -17,10 +17,22 @@ router.get('/', async (req, res, next) => {
 // GET /api/images/project/:id
 router.get('/project/:id', async (req, res, next) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM project_images WHERE project_id = ?', [req.params.id])
+        const [rows] = await pool.query(
+            `SELECT images.id, images.img_name, images.img_url, images.created_at, project_images.is_thumbnail
+            FROM project_images
+            JOIN images ON project_images.image_id = images.id
+            WHERE project_images.project_id = ?`,
+            [req.params.id]
+        )
+
         if (!rows.length) return res.status(404).json({ error: 'Not found' })
 
-        res.json(rows)
+        const formattedRows = rows.map((row) => ({
+            ...row,
+            is_thumbnail: Boolean(row.is_thumbnail)
+        }))
+
+        res.json(formattedRows)
     } catch (err) {
         next(err)
     }

@@ -62,6 +62,26 @@ router.post('/link', authenticate, async (req, res, next) => {
     }
 })
 
+// DELETE /api/tags/link
+router.delete('/link', authenticate, async (req, res, next) => {
+    try {
+        const { project_id, tag_id } = req.body
+
+        if (!project_id || !tag_id) {
+            return res.status(400).json({ error: 'project_id and tag_id are required' })
+        }
+
+        await pool.query(
+            'DELETE FROM project_tech_tags WHERE project_id = ? AND tag_id = ?',
+            [project_id, tag_id]
+        )
+
+        res.status(204).send()
+    } catch (err) {
+        next(err)
+    }
+})
+
 // DELETE /api/tags/:id
 router.delete('/:id', authenticate, async (req, res, next) => {
     try {
