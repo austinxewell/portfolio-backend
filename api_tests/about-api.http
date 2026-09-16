@@ -1,3 +1,27 @@
 # Get about
 GET http://localhost:5000/api/about
 Accept: application/json
+###
+
+PUT http://localhost:5000/api/about
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4OTU2OTM1NCwiZXhwIjoxNzg5NjU1NzU0fQ.TN1GmFsnk9t608RYwObam5p4I74MeTvTCH-mwSYn51g
+Content-Type: application/json
+
+# FULL OBJECT BODY (empty fields are ignored)
+# {
+#     "name": "Austin D Ewell",
+#     "title": "Software Engineer",
+#     "specialty": "Frontend Specialist",
+#     "contact_email": "FAKE@gmail.com",
+#     "linkedin_url": "",
+#     "github_url": "",
+#     "resume_url": "",
+#     "blog_url": "",
+# }
+
+{
+    "name": "Austin Ewell",
+    "title": "Web Developer",
+    "specialty": "Frontend Specialist",
+    "contact_email": "austin.ewell86@gmail.com"
+}
