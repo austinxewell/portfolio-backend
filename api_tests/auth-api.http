@@ -3,9 +3,9 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "admin@example.com",
-    "password": "password123",
-    "display_name": "Admin"
+    "email": "test@fake.com",
+    "password": "fakePassword",
+    "display_name": "Fake User"
 }
 
 ###
@@ -23,7 +23,7 @@ Content-Type: application/json
 
 ### Auth: Get Current User (requires access token)
 GET http://localhost:5000/api/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc2MjM1OTM0OSwiZXhwIjoxNzYyMzYwMjQ5fQ.NHcOXed2umqQLuGJq1Z6WSiUxHLIMpN0ld2hsAX9KUE
+Authorization: Bearer {{accessToken}}
 
 # ###
 

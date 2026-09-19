@@ -4,7 +4,7 @@ Accept: application/json
 ###
 
 PUT http://localhost:5000/api/about
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4OTU2OTM1NCwiZXhwIjoxNzg5NjU1NzU0fQ.TN1GmFsnk9t608RYwObam5p4I74MeTvTCH-mwSYn51g
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 # FULL OBJECT BODY (empty fields are ignored)

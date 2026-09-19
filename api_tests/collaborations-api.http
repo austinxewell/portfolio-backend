@@ -1,3 +1,24 @@
 # Get Collaborations
 GET http://localhost:5000/api/collaborations
 Accept: application/json
+###
+
+# Post Collaboration
+POST http://localhost:5000/api/collaborations
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "company_name": "Test Company" }
+###
+
+# Update Collaboration
+PUT http://localhost:5000/api/collaborations/11
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "company_name": "Test Company: Updated" }
+###
+
+# Delete collaboration
+DELETE http://localhost:5000/api/collaborations/12
+Authorization: Bearer {{accessToken}}

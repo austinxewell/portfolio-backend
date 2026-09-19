@@ -10,6 +10,7 @@ Accept: application/json
 
 # Post a new image
 POST http://localhost:5000/api/images
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 { 
@@ -20,6 +21,7 @@ Content-Type: application/json
 
 # Link an Image to a Project
 POST http://localhost:5000/api/images/link
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 { 
@@ -31,3 +33,4 @@ Content-Type: application/json
 
 # Delete an existing image
 DELETE http://localhost:5000/api/images/19
+Authorization: Bearer {{accessToken}}
