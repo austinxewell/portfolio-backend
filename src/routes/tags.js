@@ -34,7 +34,7 @@ router.post('/', authenticate, async (req, res, next) => {
     }
 })
 
-// POT /api/tags/link
+// POST /api/tags/link
 router.post('/link', authenticate, async (req, res, next) => {
     try {
         const { project_id, tag_id, is_primary } = req.body
@@ -92,6 +92,37 @@ router.delete('/:id', authenticate, async (req, res, next) => {
 
         await pool.query('DELETE FROM tech_tags WHERE id = ?', [id])
         res.status(204).send()
+    } catch (err) {
+        next(err)
+    }
+})
+
+// PUT /api/tags/:id
+router.put('/:id', authenticate, async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const { tag_name } = req.body
+
+        if (!tag_name || typeof tag_name !== 'string' || !tag_name.trim()) {
+            return res.status(400).json({ error: 'tag_name is required' })
+        }
+
+        const [existing] = await pool.query(`SELECT * FROM tech_tags WHERE id = ?`, [id])
+
+        if (!existing.length) return res.status(404).json({ error: 'Tag not found' })
+
+        await pool.query(
+            `UPDATE tech_tags SET
+            tag_name = ?
+            WHERE id = ?`,
+            [
+                tag_name,
+                id
+            ]
+        )
+
+        const [rows] = await pool.query(`SELECT * FROM tech_tags WHERE id = ?`, [id])
+        res.json(rows[0])
     } catch (err) {
         next(err)
     }

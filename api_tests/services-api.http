@@ -1,3 +1,38 @@
 # Get services
 GET http://localhost:5000/api/services
 Accept: application/json
+###
+
+# Post Services
+POST http://localhost:5000/api/services
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "service_name": "Database Management",
+    "description": "I will create databases and apis to help organize important information",
+    "icon": "logos:nodejs"
+}
+###
+
+# Update service
+PUT http://localhost:5000/api/services/4
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+# FULL OBJECT BODY (empty fields are ignored)
+# {
+#     "service_name": "Database Management",
+#     "description": "I will create databases and apis to help organize important information",
+#     "icon": "logos:nodejs"
+# }
+
+{
+    "service_name": "Database Management: Updated",
+    "icon": "lucide:server"
+}
+###
+
+# Delete service
+DELETE http://localhost:5000/api/services/4
+Authorization: Bearer {{accessToken}}

@@ -1,0 +1,27 @@
+# Get users
+GET http://localhost:5000/api/users
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+###
+
+# Update Users
+PUT http://localhost:5000/api/users/3
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+# FULL OBJECT BODY (empty fields are ignored)
+# {
+#     "email": "dMuffMaster@boss.com",
+#     "password": "AgentMichaelScarn",
+#     "display_name": "Michael Scott"
+# }
+
+{
+    "email": "dMuffMaster@boss.com",
+    "display_name": "Michael Scott"
+}
+###
+
+# Delete service
+DELETE http://localhost:5000/api/users/3
+Authorization: Bearer {{accessToken}}

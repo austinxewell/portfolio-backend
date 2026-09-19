@@ -1,3 +1,40 @@
 # Get Skills
 GET http://localhost:5000/api/skills
 Accept: application/json
+###
+
+# Post Skill
+POST http://localhost:5000/api/skills
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "name": "Test Skill",
+    "level": "expert",
+    "category": "frontend",
+    "icon": "logos:nodejs"
+}
+###
+
+# Update Skill
+PUT http://localhost:5000/api/skills/44
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+# FULL OBJECT BODY (empty fields are ignored)
+# {
+#     "name": "Test Skill",
+#     "level": "expert",
+#     "category": "frontend",
+#     "icon": "logos:nodejs"
+# }
+
+{
+    "name": "Test Skill: Updated",
+    "category": "backend"
+}
+###
+
+# Delete Skill
+DELETE http://localhost:5000/api/skills/43
+Authorization: Bearer {{accessToken}}

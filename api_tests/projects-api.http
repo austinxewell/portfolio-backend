@@ -20,6 +20,7 @@ Accept: application/json
 
 # Create a new project
 POST http://localhost:5000/api/projects
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
@@ -35,6 +36,7 @@ Content-Type: application/json
 
 # Update an existing project
 PUT http://localhost:5000/api/projects/3
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
@@ -51,3 +53,4 @@ Content-Type: application/json
 
 # Delete an existing project
 DELETE http://localhost:5000/api/projects/3
+Authorization: Bearer {{accessToken}}
