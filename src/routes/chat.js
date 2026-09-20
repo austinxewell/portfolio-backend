@@ -1,3 +1,4 @@
+// routes/chat.js
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import pool from '../db.js'
@@ -68,7 +69,31 @@ async function getProjectsWithDetails() {
     return Array.from(projectsMap.values())
 }
 
-async function buildSystemPrompt() {
+function getRelevantProjects(allProjects, userMessage) {
+    const query = userMessage.toLowerCase()
+
+    const scored = allProjects.map((p) => {
+        const haystack = [
+            p.project_name,
+            p.description,
+            ...p.tags.map((t) => t.tag_name),
+        ].join(' ').toLowerCase()
+
+        const score = haystack.split(' ').filter((word) => query.includes(word) && word.length > 3).length
+
+        return { project: p, score }
+    })
+
+    const matched = scored.filter((s) => s.score > 0).sort((a, b) => b.score - a.score)
+
+    const selected = matched.length > 0
+        ? matched.slice(0, 5).map((s) => s.project)
+        : allProjects.slice(0, 5)
+
+    return selected
+}
+
+async function buildSystemPrompt(userMessage) {
     const [[aboutRows], [skills], projects, [services]] = await Promise.all([
         pool.query('SELECT * FROM about WHERE id = 1'),
         pool.query('SELECT * FROM skills'),
@@ -76,11 +101,10 @@ async function buildSystemPrompt() {
         pool.query('SELECT * FROM services'),
     ])
     const about = aboutRows[0] ?? {}
+    const relevantProjects = getRelevantProjects(projects, userMessage)
 
-    // Strip fields the model doesn't need to answer questions accurately
-    const trimmedProjects = projects.map((p) => ({
+    const trimmedProjects = relevantProjects.map((p) => ({
         project_name: p.project_name,
-        overview: p.overview,
         description: p.description,
         live_url: p.live_url,
         github_url: p.github_url,
@@ -90,26 +114,26 @@ async function buildSystemPrompt() {
 
     return `You are an AI assistant speaking as Austin Ewell's AI Model on his portfolio site, AuEwellify. Respond in first person, as if Austin himself is answering — "I built this with...", "My experience includes...". Answer questions about your work, skills, and experience using ONLY the information below.
 
-    Respond in plain conversational text only — no markdown, no bullet points, no bold formatting, no headers. Write like you're texting someone, not listing a resume.
+Respond in plain conversational text only — no markdown, no bullet points, no bold formatting, no headers. Write like you're texting someone, not listing a resume.
 
-    When asked persuasive questions (e.g. "why should I hire you", "what makes you a good fit"), don't just list data verbatim — make an actual case. Pick 2-3 of your strongest, most relevant points and explain briefly why they matter, in a natural, confident tone. Don't try to mention everything.
+When asked persuasive questions (e.g. "why should I hire you", "what makes you a good fit"), don't just list data verbatim — make an actual case. Pick 2-3 of your strongest, most relevant points and explain briefly why they matter, in a natural, confident tone. Don't try to mention everything.
 
-    If asked something not covered here, do NOT guess or invent details. Instead, respond with something like: "Great question! Austin's AI Model hasn't been trained on this subject — you might want to ask the real Austin this one." Keep it friendly and light, but make it clear you don't have the answer.
+If asked something not covered here, do NOT guess or invent details. Instead, respond with something like: "Great question! Austin's AI Model hasn't been trained on this subject — you might want to ask the real Austin this one." Keep it friendly and light, but make it clear you don't have the answer.
 
-    Respond in a friendly, conversational tone otherwise. Keep answers concise; don't pad with unnecessary preamble.
+Respond in a friendly, conversational tone otherwise. Keep answers concise; don't pad with unnecessary preamble.
 
-    ABOUT:
-    ${JSON.stringify(about)}
+ABOUT:
+${JSON.stringify(about)}
 
-    SKILLS:
-    ${JSON.stringify(skills)}
+SKILLS:
+${JSON.stringify(skills)}
 
-    PROJECTS:
-    ${JSON.stringify(trimmedProjects)}
+PROJECTS (showing the ${trimmedProjects.length} most relevant to this question — mention that you have other projects too if asked for a fuller list):
+${JSON.stringify(trimmedProjects)}
 
-    SERVICES:
-    ${JSON.stringify(services)}
-    `
+SERVICES:
+${JSON.stringify(services)}
+`
 }
 
 router.post('/', chatLimiter, async (req, res) => {
@@ -120,7 +144,7 @@ router.post('/', chatLimiter, async (req, res) => {
     }
 
     try {
-        const systemPrompt = await buildSystemPrompt()
+        const systemPrompt = await buildSystemPrompt(message)
 
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
