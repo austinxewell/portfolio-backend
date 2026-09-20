@@ -1,0 +1,16 @@
+# Chat: Ask a question
+POST http://localhost:5000/api/chat
+Authorization: Bearer {{groqToken}}
+Content-Type: application/json
+
+{
+    "message": "Tell me about the project Simple Chat and let me see the display picture and tags"
+}
+
+###
+
+### Check Groq models directly
+GET https://api.groq.com/openai/v1/models
+Authorization: Bearer {{groqToken}}
+
+###

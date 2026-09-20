@@ -16,6 +16,7 @@ import projectsRouter from './routes/projects.js'
 import aboutRouter from './routes/about.js'
 import skillsRouter from './routes/skills.js'
 import collaborationRouter from './routes/collaborations.js'
+import chatRouter from './routes/chat.js'
 import servicesRouter from './routes/services.js'
 import tagsRouter from './routes/tags.js'
 import imagesRouter from './routes/images.js'
@@ -76,6 +77,7 @@ app.use('/api/projects', projectsRouter)
 app.use('/api/about', aboutRouter)
 app.use('/api/skills', skillsRouter)
 app.use('/api/collaborations', collaborationRouter)
+app.use('/api/chat', chatRouter)
 app.use('/api/services', servicesRouter)
 app.use('/api/tags', tagsRouter)
 app.use('/api/images', imagesRouter)
