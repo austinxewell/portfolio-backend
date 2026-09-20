@@ -1,4 +1,8 @@
+// utils/chatContext.js
 import pool from '../db.js'
+
+const PROFESSIONAL_START = new Date('2022-02-01')
+const CODING_START = new Date('2019-12-01')
 
 async function getProjectsWithDetails() {
     const [rows] = await pool.query(`
@@ -110,6 +114,31 @@ function formatServices(services) {
     return `Services offered: ${services.map((s) => s.service_name).join(', ')}.`
 }
 
+function yearsSince(start) {
+    const now = new Date()
+    let years = now.getFullYear() - start.getFullYear()
+    const hasHadAnniversaryThisYear =
+        now.getMonth() > start.getMonth() ||
+        (now.getMonth() === start.getMonth() && now.getDate() >= start.getDate())
+    if (!hasHadAnniversaryThisYear) years--
+    return years
+}
+
+function getPersonnelInfo() {
+    const professionalYears = yearsSince(PROFESSIONAL_START)
+    const totalYears = yearsSince(CODING_START)
+    const professionalStartYear = PROFESSIONAL_START.getFullYear()
+    const codingStartYear = CODING_START.getFullYear()
+
+    return `${professionalYears}+ years professional (since ${professionalStartYear}), ${totalYears}+ years total since ${codingStartYear}.
+
+Education: coding bootcamp through the University of Utah. Background is mostly hands-on — learned most from real production work, not the classroom.
+
+At StarkSys (current employer, since ${professionalStartYear}): lead 4+ SaaS apps, contributed to many more (apps and high-traffic websites). Built internal platform for 300+ daily employees (+60% tracked activity). Set frontend architecture standards and code review practices. Build accessible (WCAG/ARIA) interfaces, CI/CD via Git, Docker, Kubernetes.
+
+Before that (${codingStartYear} to ${professionalStartYear}): 3 years independent contractor, full-stack apps for small businesses end-to-end.`
+}
+
 export async function buildSystemPrompt(userMessage) {
     const [[aboutRows], [skills], projects, [services]] = await Promise.all([
         pool.query('SELECT * FROM about WHERE id = 1'),
@@ -127,6 +156,8 @@ export async function buildSystemPrompt(userMessage) {
     const includeServices = matchesAny(services.map((s) => s.service_name).join(' '), userMessage)
         || /service|hire|offer|freelance|work with/.test(query)
 
+    const includePersonnelInfo = /experience|background|career|why|hire|about you|yourself|history|long|start|begin|learn|journey|role|position|study|studied|school|education|degree|bootcamp|university|college|where.*work|current(ly)? work|employ|company you|day job/.test(query)
+
     const includeImages = /image|photo|picture|screenshot|look|see/.test(query)
 
     const relevantProjects = getRelevantProjects(projects, userMessage)
@@ -139,12 +170,17 @@ Plain conversational text only, no markdown or bullet formatting in your reply. 
 
 For persuasive questions ("why hire you"), pick 2-3 strongest points and make a case naturally — don't list everything.
 
+When asked about education, school, or degree, always pair the answer with your hands-on experience — don't just state the bootcamp and stop. Make clear that real-world production work is where you've grown the most.
+
+When citing a date from the information below, copy the exact month and year as written — do not shift it by a month or estimate.
+
 If something's not covered below, say: "Great question! Austin's AI Model hasn't been trained on this subject — you might want to ask the real Austin this one." Keep it light.
 
 ABOUT:
 ${aboutText}
 
 ${includeSkills ? `SKILLS:\n${formatSkills(skills)}\n` : ''}
+${includePersonnelInfo ? `BACKGROUND:\n${getPersonnelInfo()}\n` : ''}
 PROJECTS (${relevantProjects.length} most relevant — mention there are more if asked):
 ${formatProjects(relevantProjects, includeImages)}
 

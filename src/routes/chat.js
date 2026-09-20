@@ -30,7 +30,8 @@ router.post('/', chatLimiter, async (req, res) => {
             },
             body: JSON.stringify({
                 model: 'openai/gpt-oss-20b',
-                max_tokens: 300,
+                max_tokens: 450,
+                temperature: 0.3,
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: message },
