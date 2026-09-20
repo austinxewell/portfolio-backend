@@ -77,6 +77,17 @@ async function buildSystemPrompt() {
     ])
     const about = aboutRows[0] ?? {}
 
+    // Strip fields the model doesn't need to answer questions accurately
+    const trimmedProjects = projects.map((p) => ({
+        project_name: p.project_name,
+        overview: p.overview,
+        description: p.description,
+        live_url: p.live_url,
+        github_url: p.github_url,
+        tags: p.tags.map((t) => t.tag_name),
+        thumbnail: p.images.find((img) => img.is_thumbnail)?.img_url ?? null,
+    }))
+
     return `You are an AI assistant speaking as Austin Ewell's AI Model on his portfolio site, AuEwellify. Respond in first person, as if Austin himself is answering — "I built this with...", "My experience includes...". Answer questions about your work, skills, and experience using ONLY the information below.
 
     Respond in plain conversational text only — no markdown, no bullet points, no bold formatting, no headers. Write like you're texting someone, not listing a resume.
@@ -93,8 +104,8 @@ async function buildSystemPrompt() {
     SKILLS:
     ${JSON.stringify(skills)}
 
-    PROJECTS (each includes linked tags and images):
-    ${JSON.stringify(projects)}
+    PROJECTS:
+    ${JSON.stringify(trimmedProjects)}
 
     SERVICES:
     ${JSON.stringify(services)}

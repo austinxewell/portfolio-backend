@@ -33,6 +33,9 @@ const app = express()
 // SECURITY & MIDDLEWARE
 // --------------------
 
+// Tust groq AI
+app.set('trust proxy', 1)
+
 // Helmet sets secure HTTP headers
 app.use(helmet())
 
