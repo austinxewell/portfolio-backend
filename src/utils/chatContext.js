@@ -114,6 +114,12 @@ function formatServices(services) {
     return `Services offered: ${services.map((s) => s.service_name).join(', ')}.`
 }
 
+function formatRecommendations(recommendations) {
+    const rec = recommendations[0]
+    if (!rec) return ''
+    return `"${rec.recommendation}" — ${rec.recommended_by}, ${rec.job_title} at ${rec.company_name}.`
+}
+
 function yearsSince(start) {
     const now = new Date()
     let years = now.getFullYear() - start.getFullYear()
@@ -140,11 +146,12 @@ Before that (${codingStartYear} to ${professionalStartYear}): 3 years independen
 }
 
 export async function buildSystemPrompt(userMessage) {
-    const [[aboutRows], [skills], projects, [services]] = await Promise.all([
+    const [[aboutRows], [skills], projects, [services], [recommendations]] = await Promise.all([
         pool.query('SELECT * FROM about WHERE id = 1'),
         pool.query('SELECT * FROM skills'),
         getProjectsWithDetails(),
         pool.query('SELECT * FROM services'),
+        pool.query('SELECT * FROM recommendations ORDER BY id DESC'),
     ])
 
     const about = aboutRows[0] ?? {}
@@ -159,6 +166,8 @@ export async function buildSystemPrompt(userMessage) {
     const includePersonnelInfo = /experience|background|career|why|hire|about you|yourself|history|long|start|begin|learn|journey|role|position|study|studied|school|education|degree|bootcamp|university|college|where.*work|current(ly)? work|employ|company you|day job/.test(query)
 
     const includeImages = /image|photo|picture|screenshot|look|see/.test(query)
+
+    const includeRecommendations = /work with|working with|colleague|coworker|teammate|reference|recommend|testimonial|review|opinion of you|like to work/.test(query)
 
     const relevantProjects = getRelevantProjects(projects, userMessage)
 
@@ -181,6 +190,7 @@ ${aboutText}
 
 ${includeSkills ? `SKILLS:\n${formatSkills(skills)}\n` : ''}
 ${includePersonnelInfo ? `BACKGROUND:\n${getPersonnelInfo()}\n` : ''}
+${includeRecommendations ? `WHAT A COLLEAGUE SAYS (quote naturally, don't recite word-for-word every time):\n${formatRecommendations(recommendations)}\n` : ''}
 PROJECTS (${relevantProjects.length} most relevant — mention there are more if asked):
 ${formatProjects(relevantProjects, includeImages)}
 

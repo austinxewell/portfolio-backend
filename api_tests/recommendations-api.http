@@ -1,0 +1,42 @@
+# Get all Recommendations
+GET http://localhost:5000/api/recommendations
+Accept: application/json
+###
+
+# Post Recommendation
+POST http://localhost:5000/api/recommendations
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "recommendation": "Pretend this is an actual recommendation",
+    "recommended_by": "Jim Halpert",
+    "job_title": "Paper Salesman",
+    "company_name": "Dunder Mifflin"
+}
+###
+
+# Update Recommendation
+PUT http://localhost:5000/api/recommendations/3
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+# FULL OBJECT BODY (empty fields are ignored)
+# {
+#     "recommendation": "This is an updated recommendation",
+#     "recommended_by": "Pam Halpert",
+#     "job_title": "Receptionist",
+#     "company_name": "Michael Scott Paper Company"
+# }
+
+{
+    "recommendation": "This is an updated recommendation",
+    "recommended_by": "Pam Halpert",
+    "job_title": "Receptionist",
+    "company_name": "Michael Scott Paper Company"
+}
+###
+
+# Delete Skill
+DELETE http://localhost:5000/api/recommendations/3
+Authorization: Bearer {{accessToken}}
