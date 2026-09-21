@@ -29,3 +29,6 @@ SOURCE sql/seeds/seed.services.sql;
 
 -- Seed Users
 SOURCE sql/seeds/seed.users.sql;
+
+-- Seed Recommendations
+SOURCE sql/seeds/seed.recommendations.sql

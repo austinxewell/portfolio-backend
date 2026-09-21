@@ -22,6 +22,7 @@ import tagsRouter from './routes/tags.js'
 import imagesRouter from './routes/images.js'
 import authRouter from './routes/auth.js'
 import userRouter from './routes/users.js'
+import recommendationRouter from './routes/recommendations.js'
 import testRouter from './routes/test.js'
 
 // Custom error handler
@@ -33,7 +34,7 @@ const app = express()
 // SECURITY & MIDDLEWARE
 // --------------------
 
-// Tust groq AI
+// Trust Railway's reverse proxy so req.ip and express-rate-limit see the real client IP
 app.set('trust proxy', 1)
 
 // Helmet sets secure HTTP headers
@@ -86,6 +87,7 @@ app.use('/api/tags', tagsRouter)
 app.use('/api/images', imagesRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/users', userRouter)
+app.use('/api/recommendations', recommendationRouter)
 app.use('/api/test', testRouter)
 
 // --------------------
