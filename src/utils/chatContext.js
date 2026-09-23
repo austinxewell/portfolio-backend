@@ -60,6 +60,8 @@ async function getProjectsWithDetails() {
     return Array.from(projectsMap.values())
 }
 
+const STOPWORDS = ['austin', 'with', 'that', 'this', 'from', 'built', 'your', 'what']
+
 function getRelevantProjects(allProjects, userMessage) {
     const query = userMessage.toLowerCase()
 
@@ -70,7 +72,9 @@ function getRelevantProjects(allProjects, userMessage) {
             ...p.tags.map((t) => t.tag_name),
         ].join(' ').toLowerCase()
 
-        const score = haystack.split(' ').filter((word) => query.includes(word) && word.length > 3).length
+        const score = haystack.split(/\W+/)
+            .filter((word) => word.length > 3 && !STOPWORDS.includes(word) && query.includes(word))
+            .length
 
         return { project: p, score }
     })
@@ -158,16 +162,17 @@ export async function buildSystemPrompt(userMessage) {
     const query = userMessage.toLowerCase()
 
     const includeSkills = matchesAny(skills.map((s) => s.name).join(' '), userMessage)
-        || /skill|tech|stack|know|experience|expert/.test(query)
+        || /skill|tech|stack|know|experience|expert|strong|best at|good at|database|language|framework|tool/.test(query)
 
     const includeServices = matchesAny(services.map((s) => s.service_name).join(' '), userMessage)
-        || /service|hire|offer|freelance|work with/.test(query)
+        || /service|hire|offer|freelance|work with|can (you|austin)|build|website|web app|dashboard|api|figma|client/.test(query)
 
-    const includePersonnelInfo = /experience|background|career|why|hire|about you|yourself|history|long|start|begin|learn|journey|role|position|study|studied|school|education|degree|bootcamp|university|college|where.*work|current(ly)? work|employ|company you|day job/.test(query)
+    const includePersonnelInfo = /experience|background|career|why|hire|about you|yourself|history|long|start|begin|learn|journey|role|position|study|studied|school|education|degree|bootcamp|university|college|where.*work|current(ly)? work|employ|company you|day job|who is|who's|professional|production|users|\bown|independen|solo|\blead|\bled\b|team|self.?taught|review|senior|level|saas|built|build/.test(query)
+
+    const includeRecommendations = /work with|working with|worked with|colleague|coworker|teammate|reference|recommend|testimonial|review|opinion of you|opinion of austin|people say about|like to work|what is austin like|what are you like|personality|explain|non.?technical|\bsaid\b|\bsays?\b|\bsaying\b|feedback|think of (him|you|austin)|reputation/.test(query)
+
 
     const includeImages = /image|photo|picture|screenshot|look|see/.test(query)
-
-    const includeRecommendations = /work with|working with|colleague|coworker|teammate|reference|recommend|testimonial|review|opinion of you|like to work/.test(query)
 
     const relevantProjects = getRelevantProjects(projects, userMessage)
 
